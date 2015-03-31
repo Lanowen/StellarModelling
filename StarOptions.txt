@@ -10,10 +10,12 @@
 #shoot_density_change [density]
 #to change the amount the shooting method changes density by [density]
 
+make_pdf 0
+graph_every_iteration 1
 shoot_density_change 200.0
 #star 1 36700 5000000
 #star 2 43500 6000000
-#star 10 96000 14000000
+star 10 96000 14000000
 #star 11 101100 15000000
 #star 12 104200 15500000
 #star 12 104200 16000000
@@ -28,4 +30,4 @@ shoot_density_change 200.0
 shoot_density_change 1000.0
 graph_every_iteration 1
 R_lim_default 1.0
-redgiant 31 1000000000 5E8 0.2
+#redgiant 31 1000000000 5E8 0.2

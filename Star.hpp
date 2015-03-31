@@ -69,7 +69,7 @@ public:
 
 	void solve();
 
-	void graph(int starnum);
+	void graph(int starnum, bool makepdf = true);
 
 	inline void push() {
 		temperature.solver.push();

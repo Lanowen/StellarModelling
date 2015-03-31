@@ -108,7 +108,11 @@ void Star::solve() {
 
 }
 
-void Star::graph(int starnum) {
+void Star::graph(int starnum, bool makepdf) {
+
+	if (!makepdf) {
+		dlin.metafl("XWIN");
+	}
 
 	if (this->temperature.arr[1].size() > this->luminosity.arr[1].size()) {
 		this->temperature.arr[1].pop_back();

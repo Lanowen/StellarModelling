@@ -29,6 +29,7 @@ int main() {
 		//t_c = 5.0E6L + t*1E6L;
 	string tag;
 	bool graph_iteration = false;
+	bool makepdf = true;
 	long double R_lim_default = 10.0L;
 
 	while (!opt.eof()) {
@@ -57,6 +58,15 @@ int main() {
 			opt >> temp;
 
 			graph_iteration = temp;
+
+			opt.ignore(numeric_limits<streamsize>::max(), '\n');
+			continue;
+		}
+		else if (tag == "make_pdf") {
+			int temp;
+			opt >> temp;
+
+			makepdf = temp;
 
 			opt.ignore(numeric_limits<streamsize>::max(), '\n');
 			continue;
@@ -95,7 +105,7 @@ int main() {
 			star->solve();
 
 			if (graph_iteration) {
-				star->graph(t);
+				star->graph(t, makepdf);
 			}
 
 			double frac = star->frac_diff();
@@ -152,6 +162,10 @@ int main() {
 
 				star->solve();
 
+				if (graph_iteration) {
+					star->graph(t, makepdf);
+				}
+
 				if (isnan(star->frac_diff()) || isinf(star->frac_diff())) {
 					if (lastDir == 1)
 						goto down;
@@ -191,7 +205,7 @@ int main() {
 			}
 		}
 
-		last_pos_frac->graph(t);
+		last_pos_frac->graph(t, makepdf);
 		delete last_pos_frac;
 
 		opt.ignore(numeric_limits<streamsize>::max(), '\n');
