@@ -15,7 +15,7 @@ graph_every_iteration 1
 shoot_density_change 200.0
 #star 1 36700 5000000
 #star 2 43500 6000000
-star 10 96000 14000000
+#star 10 96000 14000000
 #star 11 101100 15000000
 #star 12 104200 15500000
 #star 12 104200 16000000
@@ -27,7 +27,7 @@ star 10 96000 14000000
 #star 28 2000 32000000
 #star 29 1400 33000000
 #star 30 900 34000000
-shoot_density_change 1000.0
-graph_every_iteration 1
-R_lim_default 1.0
-#redgiant 31 1000000000 5E8 0.2
+shoot_density_change 5000.0
+graph_every_iteration 0
+R_lim_default 5.0
+redgiant 31 101100 2E8 1.0

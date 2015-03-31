@@ -33,7 +33,7 @@ int main() {
 	long double R_lim_default = 10.0L;
 
 	while (!opt.eof()) {
-		RK4::step = 10000;
+		
 		int frac_test = 0;
 		bool bisect = false;
 		long double R_lim = R_lim_default;
@@ -101,7 +101,7 @@ int main() {
 			cout << endl << endl << i << " /10000" << "=== Testing density: " << rho_c << " kg/m^3 , T = " << t_c << " K ===" << endl << endl;
 			std::cout.precision(ss);
 			star = new Star(t_c, rho_c, X, Y, Z, 5000.0L, 10000.0L, 1.2L*R_lim + 1.0L, He_cutoff);
-
+			RK4::step = 5000;
 			star->solve();
 
 			if (graph_iteration) {
@@ -124,7 +124,7 @@ int main() {
 					if (rho_c - shoot_delta_density < 0)
 						rho_c /= 2;
 					else 
-						rho_c -= shoot_delta_density;
+						rho_c += shoot_delta_density;
 				}
 			}
 			else{ //negative, go higher
@@ -137,7 +137,7 @@ int main() {
 					if (!isnan(frac) && !isinf(frac))
 						frac_test = 1;
 					rho_c_1 = rho_c;
-					rho_c += shoot_delta_density;
+					rho_c -= shoot_delta_density;
 				}
 			}
 		}

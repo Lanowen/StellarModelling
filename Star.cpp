@@ -74,7 +74,7 @@ void Star::solve() {
 	//	this->iterate(250);
 	//}
 
-	while (isnan(temperature.arr[1].back())) {
+	while (isnan(temperature.arr[1].back()) || isnan(tau.arr[1].back()) || isinf(tau.arr[1].back())) {
 		popValues();
 	}	
 	
