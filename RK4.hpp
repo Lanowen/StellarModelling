@@ -16,7 +16,7 @@ public:
 	unsigned int currK;
 	bool updatingK;
 	
-	bool updateK(){
+	inline bool updateK() {
 		switch (currK) {
 		case 1:
 			updatingK = true;
@@ -52,19 +52,19 @@ public:
 		return true;
 	}
 
-	void push() {
+	inline void push() {
 		saved_y.push_back(y);
 		saved_t.push_back(t);
 	}
 
-	void pop() {
+	inline void pop() {
 		y = saved_y.back();
 		t = saved_t.back();
 		saved_y.pop_back();
 		saved_t.pop_back();
 	}
 
-	void clear() {
+	inline void clear() {
 		saved_y.clear();
 		saved_t.clear();
 	}
@@ -72,14 +72,14 @@ public:
 	RK4(function<long double(long double, long double)> func_derivative, long double initial_value, long double initial_t = 0) : t(initial_t), f(func_derivative), y(initial_value), currK(1), updatingK(false) {
 	}
 
-	void iterate(){
+	inline void iterate() {
 		y += (k1 + 2.0*k2 + 2.0*k3 + k4)/6.0;
 		t += step;
 		//v_t.push_back(t);
 		//v_y.push_back(y);
 	}
 
-	long double get(){
+	inline long double get() {
 		if (updatingK)
 			return intermed_y;
 

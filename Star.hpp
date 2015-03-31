@@ -9,9 +9,10 @@
 #include "Tau.hpp"
 #include "Pressure.hpp"
 #include "Temperature.hpp"
-#include "Opal.hpp"
+//#include "Opal.hpp"
 
 #include <discpp.h>
+#include <sstream>
 
 using namespace std;
 
@@ -21,7 +22,10 @@ static Dislin dlin;
 static char legendText[255] = { '/0' };
 static int legendIndex = 1;
 
-static void dislinInit(char* xName, char* yName, char* title) {
+static void dislinInit(char* xName, char* yName, char* title, int i) {
+	stringstream ss;
+	ss << "star" << i << ".pdf";
+	dlin.setfil(ss.str().c_str());
 	dlin.disini();
 	//dlin.nochek();
 	dlin.pagera();
@@ -48,41 +52,47 @@ public:
 	Temperature temperature;
 	//Opal opal;
 
+	long double step_min;
+	long double step_max;
+	long double int_R_stop;
+
 	long double R_star, T_star;
 	long double T_c, rho_c;
 	long double T_max, L_max, M_max, Rho_max,P_max;
 
-	Star(long double T_c, long double rho_c, long double x, long double y, long double z/*, string opal_table*/) : /*opal(this, opal_table),*/ density(this, rho_c), energy(this), kappa(this), luminosity(this), mu(x,y,z), mass(this), tau(this), pressure(this), temperature(this, T_c), R_star(0), T_star(0), T_c(T_c), rho_c(rho_c) {
+	Star(long double T_c, long double rho_c, long double x, long double y, long double z, long double step_min, long double step_max, long double int_R_stop, long double He_cutoff = 0.0L) :
+		/*opal(this, opal_table),*/ density(this, rho_c), energy(this), kappa(this), luminosity(this), mu(this, x, y, z, He_cutoff), mass(this), tau(this), pressure(this), temperature(this, T_c), R_star(0), T_star(0), T_c(T_c), rho_c(rho_c), step_min(step_min), step_max(step_max), int_R_stop(int_R_stop)
+	{
 		//add plot points for values
 		pushValues();
 	}
 
 	void solve();
 
-	void graph();
+	void graph(int starnum);
 
-	void push() {
+	inline void push() {
 		temperature.solver.push();
 		density.solver.push();
 		luminosity.solver.push();
 		mass.solver.push();
 	}
 
-	void pop() {
+	inline void pop() {
 		temperature.solver.pop();
 		density.solver.pop();
 		luminosity.solver.pop();
 		mass.solver.pop();
 	}
 
-	void clear() {
+	inline void clear() {
 		temperature.solver.clear();
 		density.solver.clear();
 		luminosity.solver.clear();
 		mass.solver.clear();
 	}
 
-	void pushValues() {
+	inline void pushValues() {
 		temperature.pushValues();
 		density.pushValues();
 		luminosity.pushValues();
@@ -92,10 +102,43 @@ public:
 		kappa.pushValues();
 	}
 
-	long double frac_diff() {
+	inline void popValues() {
+		temperature.popValues();
+		density.popValues();
+		luminosity.popValues();
+		mass.popValues();
+		tau.popValues();
+		pressure.popValues();
+		kappa.popValues();
+	}
+
+	inline long double frac_diff() {
 		return (L_max - 4.0*pi*sigma_B*R_star*R_star*pow(T_star, 4)) / sqrt(4.0*pi*sigma_B*R_star*R_star*pow(T_star, 4));
 	}
 
-	void step();
-	void iterate();
+	inline void step() {
+		//calculate k values before iteration
+		do {
+			temperature.solver.updateK();
+			density.solver.updateK();
+			luminosity.solver.updateK();
+			mass.solver.updateK();
+		} while (tau.solver.updateK());
+
+		//iterate rk4
+		temperature.iterate();
+		density.iterate();
+		luminosity.iterate();
+		mass.iterate();
+		tau.iterate();
+	}
+
+	inline void iterate();
+
+	inline void iterate(long double rk_step) {
+		RK4::step = rk_step;
+		step();
+
+		pushValues();
+	}
 };

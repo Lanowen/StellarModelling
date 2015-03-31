@@ -32,16 +32,25 @@ public:
 		dlnPdlnT = &arr[2];
 	}
 
-	void iterate();
+	inline void iterate() {
+		solver.iterate();
+	}
 
-	long double get() {
+	inline long double get() {
 		return solver.get();
 	}
 
-	virtual void pushValues() {		
+	inline virtual void pushValues() {
 		arr[0].push_back(solver.t);
 		arr[1].push_back(solver.y);
 		dlnPdlnT->push_back(1.0 / criterion());
+		//dlnPdlnT_opal->push_back(1.0 / ((3.0*star->opal.get_kappa(get(), star->density.get())*star->luminosity.get()*star->pressure.get_P()) / (pow(get(), 4) * 16.0 * a_rad * c_0 * pi *G * star->mass.get())));
+	}
+
+	inline virtual void popValues() {
+		arr[0].pop_back();
+		arr[1].pop_back();
+		dlnPdlnT->pop_back();
 		//dlnPdlnT_opal->push_back(1.0 / ((3.0*star->opal.get_kappa(get(), star->density.get())*star->luminosity.get()*star->pressure.get_P()) / (pow(get(), 4) * 16.0 * a_rad * c_0 * pi *G * star->mass.get())));
 	}
 };

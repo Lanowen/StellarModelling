@@ -15,20 +15,26 @@ public:
 
 	long double dL_r(long double r, long double L);
 
-	Luminosity(Star* star) : star(star), solver(bind(&Luminosity::dL_r, this, placeholders::_1, placeholders::_2), L_0) {
+	Luminosity(Star* star) : star(star), solver(bind(&Luminosity::dL_r, this, placeholders::_1, placeholders::_2), L_0), Graphable(6) {
 
 	}
 
-	void iterate() {
+	inline void iterate() {
 		solver.iterate();
 	}
 
-	long double get() {
+	inline long double get() {
 		return solver.get();
 	}
 
-	virtual void pushValues() {
-		arr[0].push_back(solver.t);
-		arr[1].push_back(solver.y);
+	virtual void pushValues();
+
+	inline virtual void popValues() {
+		arr[0].pop_back();
+		arr[1].pop_back();
+		arr[2].pop_back();
+		arr[3].pop_back();
+		arr[4].pop_back();
+		arr[5].pop_back();
 	}
 };

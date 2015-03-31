@@ -16,11 +16,8 @@ long double Temperature::dT_dr(long double r, long double T) {
 	long double rad = dT_dr_rad(r, T);
 	return -min(dT_dr_conv(r, T), dT_dr_rad(r, T)) ;
 }
+
 long double Temperature::criterion() { //dlnTdlnP
 	return (3.0*star->kappa.get()*star->luminosity.get()*star->pressure.get_P()) / (pow(get(), 4) * 16.0 * a_rad * c_0 * pi *G * star->mass.get());
 	//return (3.0*star->opal.get_kappa(get(), star->density.get())*star->luminosity.get()*star->pressure.get_P()) / (pow(get(), 4) * 16.0 * a_rad * c_0 * pi *G * star->mass.get());
-}
-
-void Temperature::iterate() {
-	solver.iterate();
 }

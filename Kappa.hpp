@@ -24,4 +24,12 @@ public:
 	}
 
 	virtual void pushValues();
+
+	inline virtual void popValues() {
+		kh->pop_back();
+		kes->pop_back();
+		kff->pop_back();
+		logT->pop_back();
+		k->pop_back();
+	}
 };

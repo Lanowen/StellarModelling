@@ -1,0 +1,31 @@
+#this is a comment
+#
+#use:
+#star [id] [core_density] [core_temperature]
+#to solve a star with initial conditions [core_density] and [core_temperature] to be output with format star[id]_graphnumber.pdf
+#use:
+#redgiant [id] [core_density] [core_temperature] [He_mass_cutoff]
+#to solve a redgiant with an He core with a mass of [He_mass_cutoff]*Msun
+#use:
+#shoot_density_change [density]
+#to change the amount the shooting method changes density by [density]
+
+shoot_density_change 200.0
+#star 1 36700 5000000
+#star 2 43500 6000000
+#star 10 96000 14000000
+#star 11 101100 15000000
+#star 12 104200 15500000
+#star 12 104200 16000000
+#star 16 77800 20000000
+#star 25 5000 28500000
+#star 25 5020 29000000
+#star 26 3680 30000000
+#star 27 2700 31000000
+#star 28 2000 32000000
+#star 29 1400 33000000
+#star 30 900 34000000
+shoot_density_change 1000.0
+graph_every_iteration 1
+R_lim_default 1.0
+redgiant 31 1000000000 5E8 0.2

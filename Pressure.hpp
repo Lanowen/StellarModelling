@@ -30,4 +30,11 @@ public:
 	long double get_dP_rho();
 
 	virtual void pushValues();
+
+	inline virtual void popValues() {
+		deg->pop_back();
+		therm->pop_back();
+		rad->pop_back();
+		arr[0].pop_back();
+	}
 };

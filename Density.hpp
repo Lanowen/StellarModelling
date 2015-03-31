@@ -18,16 +18,21 @@ public:
 
 	}
 
-	void iterate() {
+	inline void iterate() {
 		solver.iterate();
 	}
 
-	long double get() {
+	inline long double get() {
 		return solver.get();
 	}
 
-	virtual void pushValues() {
+	inline virtual void pushValues() {
 		arr[0].push_back(solver.t);
 		arr[1].push_back(solver.y);
+	}
+
+	inline virtual void popValues() {
+		arr[0].pop_back();
+		arr[1].pop_back();
 	}
 };

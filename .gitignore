@@ -24,6 +24,7 @@ ipch/
 obj/
 Debug/
 Release/
+MS/
+MS.xlsx
 [Bb]in
 Ankh.NoLoad
-*.vcxproj*

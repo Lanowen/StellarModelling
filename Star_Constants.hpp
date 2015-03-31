@@ -7,7 +7,7 @@
 #define Tsun  5.778E3     //Temperature at the surface of the sun
 #define kb  1.3806488E-23 //Boltzmann Constant
 #define sigma_B  5.670373E-8
-#define me  9.10938291E-31 //mass of expectron kg
+#define me  9.10938291E-31 //mass of electron kg
 #define mp  1.67262178E-27 //mass of proton kg
 #define u_atomic  1.66053873E-27 //kg
 #define m_H  (1.00794*u_atomic) //mass of hydrogen kg
