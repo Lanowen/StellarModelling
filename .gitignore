@@ -25,6 +25,7 @@ obj/
 Debug/
 Release/
 MS/
-MS.xlsx
+*.xlsx
+*.pdf
 [Bb]in
 Ankh.NoLoad

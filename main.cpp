@@ -100,7 +100,7 @@ int main() {
 			std::cout.precision(19);
 			cout << endl << endl << i << " /10000" << "=== Testing density: " << rho_c << " kg/m^3 , T = " << t_c << " K ===" << endl << endl;
 			std::cout.precision(ss);
-			star = new Star(t_c, rho_c, X, Y, Z, 5000.0L, 10000.0L, 1.2L*R_lim + 1.0L, He_cutoff);
+			star = new Star(t_c, rho_c, X, Y, Z, 1.0L, LDBL_MAX, 1.2L*R_lim + 1.0L, He_cutoff);
 			RK4::step = 5000;
 			star->solve();
 
@@ -124,7 +124,7 @@ int main() {
 					if (rho_c - shoot_delta_density < 0)
 						rho_c /= 2;
 					else 
-						rho_c += shoot_delta_density;
+						rho_c -= shoot_delta_density;
 				}
 			}
 			else{ //negative, go higher
@@ -137,7 +137,7 @@ int main() {
 					if (!isnan(frac) && !isinf(frac))
 						frac_test = 1;
 					rho_c_1 = rho_c;
-					rho_c -= shoot_delta_density;
+					rho_c += shoot_delta_density;
 				}
 			}
 		}
@@ -154,7 +154,7 @@ int main() {
 				rho_c = (rho_c_1 + rho_c_2) / 2.0;
 				if (star != 0)
 					delete star;
-				star = new Star(t_c, rho_c, X, Y, Z, 800, 4000, 1.2L*R_lim + 1.0L, He_cutoff);
+				star = new Star(t_c, rho_c, X, Y, Z, 1.0L, LDBL_MAX, 1.2L*R_lim + 1.0L, He_cutoff);
 
 				std::cout.precision(19);
 				cout << count << " /" << count_min << (count > count_min ? " (trying to end on positive fractional) " : "")  << "=== Testing density: " << rho_c << " kg/m^3 , T = " << t_c << " K ===" << endl << endl;
@@ -178,10 +178,12 @@ int main() {
 				}
 
 				if (star->frac_diff() > 0) {
-					if (last_pos_frac != 0)
-						delete last_pos_frac;
-					last_pos_frac = star;
-					star = 0;
+					if (last_pos_frac == 0 || last_pos_frac->frac_diff() > star->frac_diff()) {
+						if (last_pos_frac != 0)
+							delete last_pos_frac;
+						last_pos_frac = star;
+						star = 0;
+					}					
 				down:
 					lastDir = 2;
 					R_lim = R_lim;

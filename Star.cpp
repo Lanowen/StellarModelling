@@ -5,48 +5,49 @@
 #define lineWidth 4
 
 void Star::iterate() {
-	vector<double long> T1, T2;
+	vector<double long> errors, relErrors;
 
-	do {
+	while (true) {
 		push();
 		step();
-		T1.push_back(temperature.solver.y);
-		T1.push_back(density.solver.y);
-		T1.push_back(luminosity.solver.y);
-		T1.push_back(mass.solver.y);
-		pop();
+		errors.push_back(temperature.solver.getError());
+		//errors.push_back(density.solver.getError());
+		//errors.push_back(luminosity.solver.getError());
+		//errors.push_back(mass.solver.getError());
 
-		//push();
-		RK4::step /= 2;
-		step();
-		step();
-		T2.push_back(temperature.solver.y);
-		T2.push_back(density.solver.y);
-		T2.push_back(luminosity.solver.y);
-		T2.push_back(mass.solver.y);
+		relErrors.push_back(temperature.solver.getRelError());
+		relErrors.push_back(density.solver.getRelError());
+		relErrors.push_back(luminosity.solver.getRelError());
+		relErrors.push_back(mass.solver.getRelError());
+		//pop();
 
-		long double err, terr = LDBL_MAX;
+		long double err_bound = 1E-15;
+		long double err = LDBL_EPSILON;
+		long double relerr = LDBL_EPSILON;
 
-		for (int i = 0; i < T1.size(); i++) {
-			err = 1E-14L / abs((T2[i] - T1[i]) / T2[i]);
-			terr = (err < terr) ? err : terr;
+		for (int i = 0; i < errors.size(); i++) {
+			if (errors[i] > err) {
+				err = errors[i];
+			}
+			if (relErrors[i] > relerr) {
+				relerr = relErrors[i];
+
+			}
 		}
-		
-		
+
+		//cout << RK4::step << " " << relerr << endl;
 
 		long double lastStep = RK4::step;
-		RK4::step = max(step_min, min(RK4::step*1.8L*min(terr, 2.0L), step_max));
+		RK4::step = max(step_min, min(RK4::step*pow(err_bound / 2.0 / relerr, 0.25), step_max));
 
-		//clear();
-
-		if (lastStep != step_min && RK4::step != step_min && terr < 1E-14L) {
-			T1.clear();
-			T2.clear();
+		if (relerr > err_bound && RK4::step != lastStep && RK4::step != step_min) {
+			pop();
 			continue;
 		}
-		break;
 
-	}while(true);
+		clear();
+		break;
+	};
 
 	//cout << RK4::step << " " << abs((T2[0] - T1[0]) / T2[0]) << " " << terr << endl;
 
@@ -70,9 +71,9 @@ void Star::solve() {
 		//cout << this->temperature.arr[1].back() << endl;
 	}
 
-	//for (int i = 0; i < 200000*int_R_stop; i++) {
-	//	this->iterate(250);
-	//}
+	for (int i = 0; i < 20000*int_R_stop; i++) {
+		this->iterate(250);
+	}
 
 	while (isnan(temperature.arr[1].back()) || isnan(tau.arr[1].back()) || isinf(tau.arr[1].back())) {
 		popValues();
