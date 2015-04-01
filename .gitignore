@@ -27,5 +27,6 @@ Release/
 MS/
 *.xlsx
 *.pdf
+*.zip
 [Bb]in
 Ankh.NoLoad

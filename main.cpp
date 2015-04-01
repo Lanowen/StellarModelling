@@ -14,6 +14,8 @@ int main() {
 	Star* star = 0;
 	double X = 0.7, Y = 0.28, Z = 0.02;
 	long double t_c = 8.23E6L, rho_c_1 = rho_c, rho_c_2 = 0;
+	bool ePP = true, eCNO = true, e3a = true;
+	long double err_sensitivity = 1E-15L;
 
 	long double shoot_delta_density = 200.0L;
 	
@@ -71,6 +73,45 @@ int main() {
 			opt.ignore(numeric_limits<streamsize>::max(), '\n');
 			continue;
 		}
+		else if (tag == "XYZ") {
+			opt >> X >> Y >> Z;
+
+			opt.ignore(numeric_limits<streamsize>::max(), '\n');
+			continue;
+		}
+		else if (tag == "PP") {
+			int temp;
+			opt >> temp;
+
+			ePP = temp;
+
+			opt.ignore(numeric_limits<streamsize>::max(), '\n');
+			continue;
+		}
+		else if (tag == "CNO") {
+			int temp;
+			opt >> temp;
+
+			eCNO = temp;
+
+			opt.ignore(numeric_limits<streamsize>::max(), '\n');
+			continue;
+		}
+		else if (tag == "3a") {
+			int temp;
+			opt >> temp;
+
+			e3a = temp;
+
+			opt.ignore(numeric_limits<streamsize>::max(), '\n');
+			continue;
+		}
+		else if (tag == "sensitivity") {
+			opt >> err_sensitivity;
+
+			opt.ignore(numeric_limits<streamsize>::max(), '\n');
+			continue;
+		}
 		else if (tag == "R_lim_default") {
 			opt >> R_lim_default;
 
@@ -100,7 +141,7 @@ int main() {
 			std::cout.precision(19);
 			cout << endl << endl << i << " /10000" << "=== Testing density: " << rho_c << " kg/m^3 , T = " << t_c << " K ===" << endl << endl;
 			std::cout.precision(ss);
-			star = new Star(t_c, rho_c, X, Y, Z, 1.0L, LDBL_MAX, 1.2L*R_lim + 1.0L, He_cutoff);
+			star = new Star(t_c, rho_c, X, Y, Z, 1.0L, LDBL_MAX, 1.2L*R_lim + 1.0L, ePP, eCNO, e3a, err_sensitivity, He_cutoff);
 			RK4::step = 5000;
 			star->solve();
 
@@ -154,7 +195,7 @@ int main() {
 				rho_c = (rho_c_1 + rho_c_2) / 2.0;
 				if (star != 0)
 					delete star;
-				star = new Star(t_c, rho_c, X, Y, Z, 1.0L, LDBL_MAX, 1.2L*R_lim + 1.0L, He_cutoff);
+				star = new Star(t_c, rho_c, X, Y, Z, 1.0L, LDBL_MAX, 1.2L*R_lim + 1.0L, ePP, eCNO, e3a, err_sensitivity, He_cutoff);
 
 				std::cout.precision(19);
 				cout << count << " /" << count_min << (count > count_min ? " (trying to end on positive fractional) " : "")  << "=== Testing density: " << rho_c << " kg/m^3 , T = " << t_c << " K ===" << endl << endl;

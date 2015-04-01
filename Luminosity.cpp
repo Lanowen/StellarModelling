@@ -13,9 +13,9 @@ void Luminosity::pushValues() {
 
 	long double r = solver.t;
 
-	long double dLpp_dr = 4.0 * pi * pow(r, 2) * star->density.get() * _e_pp;
-	long double dLCNO_dr = 4.0 * pi * pow(r, 2) * star->density.get() * _e_CNO;
-	long double dL3a_dr = 4.0 * pi * pow(r, 2) * star->density.get() * _e_3alpha;
+	long double dLpp_dr = star-> ePP ? (4.0 * pi * pow(r, 2) * star->density.get() * _e_pp) : 0.0L;
+	long double dLCNO_dr = star->eCNO ? (4.0 * pi * pow(r, 2) * star->density.get() * _e_CNO) : 0.0L;
+	long double dL3a_dr = star->e3a ? (4.0 * pi * pow(r, 2) * star->density.get() * _e_3alpha) : 0.0L;
 
 	arr[2].push_back(dLpp_dr);
 	arr[3].push_back(dLCNO_dr);

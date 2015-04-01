@@ -21,7 +21,7 @@ void Star::iterate() {
 		relErrors.push_back(mass.solver.getRelError());
 		//pop();
 
-		long double err_bound = 1E-15;
+		long double err_bound = err_sensitivity;
 		long double err = LDBL_EPSILON;
 		long double relerr = LDBL_EPSILON;
 
