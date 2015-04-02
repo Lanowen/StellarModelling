@@ -11,5 +11,5 @@ long double Mu::get_Y() {
 }
 
 long double Mu::get_Z() {
-	return star->mass.get() / Msun < He_cutoff ? 0.0L : Z;
+	return star->mass.get() / Msun < He_cutoff ? LDBL_EPSILON : Z;
 }

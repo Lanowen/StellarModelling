@@ -103,6 +103,9 @@
     <ClInclude Include="Tau.hpp" />
     <ClInclude Include="Temperature.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="StarOptions.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

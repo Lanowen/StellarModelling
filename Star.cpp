@@ -66,7 +66,8 @@ void Star::solve() {
 	dlin.metafl("XWIN");
 #endif
 	//cout << kappa.get() << " " << kappa.get()*pow(density.get(), 2) / abs(density.dRho_dr(density.arr[0].back(), density.get())) << endl;
-	while (kappa.get()*pow(density.get(), 2) / abs(density.dRho_dr(density.arr[0].back(), density.get())) > 1E-30 && temperature.arr[0].back() < int_R_stop*Rsun && mass.get() < 1E3*Msun) {
+	//while (kappa.get()*pow(density.get(), 2) / abs(density.dRho_dr(density.arr[0].back(), density.get())) > 1E-30 && temperature.arr[0].back() < int_R_stop*Rsun && mass.get() < 1E3*Msun) {
+	while (temperature.arr[0].back() < int_R_stop*Rsun && mass.get() < 1E3*Msun) {
 		this->iterate();
 		//cout << this->temperature.arr[1].back() << endl;
 	}
@@ -417,7 +418,7 @@ void Star::graph(int starnum, bool makepdf) {
 
 	plotconv();
 
-	//double L_3a_max = *max_element(this->luminosity.arr[4].begin(), this->luminosity.arr[4].end());
+	double L_3a_max = *max_element(this->luminosity.arr[4].begin(), this->luminosity.arr[4].end());
 
 	for (int i = 0; i < luminosity.arr[0].size(); i++) {
 		luminosity.arr[5][i] /= L_max / R_star;

@@ -17,7 +17,8 @@ XYZ 0.7 0.28 0.02
 PP 1
 CNO 1
 3a 1
-sensitivity 1E-15
+R_lim_default 3.0
+sensitivity 1E-13
 #star 1 39150 5000000
 #star 2 43500 6000000
 #star 3 50300 7000000
@@ -48,14 +49,27 @@ sensitivity 1E-15
 #star 28 2000 32000000
 #star 29 1400 33000000
 #star 30 900 34000000
-make_pdf 0
+make_pdf 1
 shoot_density_change 10000
-graph_every_iteration 0
+graph_every_iteration 1
 R_lim_default 5.0
-XYZ 1.0 0.0 0.0
-CNO 0
-sensitivity 1E-6
-#shoot_density_change 1
-#redgiant 31 17685 1.70E8 0.2
-#redgiant 32 17685 2.0E8 0.2
-#redgiant 33 299500 0.1E8 0.05
+XYZ 0.7 0.28 0.02
+CNO 1
+PP 1
+3a 1
+sensitivity 1E-13
+#redgiant 36 1E9 5E8 0.3
+#redgiant 36 604984.65582611854 1.5E8 4.275 
+#redgiant 36 604984.65582611854 1.5E8 4.3754
+#redgiant 37 386009 1.5E8 7.0 #redgiant 37 300000 1.5E8 1
+#redgiant 37 804984 1.6E8 3.655
+#redgiant 36 600000 1.5E8 4.75
+#redgiant 36 1.5E6 1.5E8 2.5
+#redgiant 36 3360000 2.0E8 2.5 #redgiant 36 5000000 2.0E8 2.125
+#redgiant 36 158489319 3.3E8 1.2
+
+#redgiant 31 137500 0.2E8 0.10
+#redgiant 32 191000 0.2E8 0.15
+#redgiant 33 274750 0.2E8 0.2
+#redgiant 34 455400 0.2E8 0.25
+#redgiant 35 881000 0.2E8 0.30

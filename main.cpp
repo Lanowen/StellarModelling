@@ -128,6 +128,11 @@ int main() {
 			opt >> t >> rho_c >> t_c >> He_cutoff;
 			red_giant = true;
 		}
+		else {
+			//do nothing
+			opt.ignore(numeric_limits<streamsize>::max(), '\n');
+			continue;
+		}
 
 		//t--;
 		rho_c_1 = rho_c;
