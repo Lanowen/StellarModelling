@@ -146,7 +146,7 @@ int main() {
 			std::cout.precision(19);
 			cout << endl << endl << i << " /10000" << "=== Testing density: " << rho_c << " kg/m^3 , T = " << t_c << " K ===" << endl << endl;
 			std::cout.precision(ss);
-			star = new Star(t_c, rho_c, X, Y, Z, 1.0L, LDBL_MAX, 1.2L*R_lim + 1.0L, ePP, eCNO, e3a, err_sensitivity, He_cutoff);
+			star = new Star(t_c, rho_c, X, Y, Z, 1.0L, LDBL_MAX, 1.2L*R_lim + 1.0L, ePP, eCNO, e3a, err_sensitivity,/* "opal_.7_.28_.02.txt",*/ He_cutoff);
 			RK4::step = 5000;
 			star->solve();
 
@@ -200,7 +200,7 @@ int main() {
 				rho_c = (rho_c_1 + rho_c_2) / 2.0;
 				if (star != 0)
 					delete star;
-				star = new Star(t_c, rho_c, X, Y, Z, 1.0L, LDBL_MAX, 1.2L*R_lim + 1.0L, ePP, eCNO, e3a, err_sensitivity, He_cutoff);
+				star = new Star(t_c, rho_c, X, Y, Z, 1.0L, LDBL_MAX, 1.2L*R_lim + 1.0L, ePP, eCNO, e3a, err_sensitivity,/* "opal_.7_.28_.02.txt",*/ He_cutoff);
 
 				std::cout.precision(19);
 				cout << count << " /" << count_min << (count > count_min ? " (trying to end on positive fractional) " : "")  << "=== Testing density: " << rho_c << " kg/m^3 , T = " << t_c << " K ===" << endl << endl;

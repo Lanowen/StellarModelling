@@ -1,11 +1,6 @@
 #include "Opal.hpp"
 #include "Star.hpp"
 
-void Opal::iterate(){
-	 //v_y.push_back(log10(get_kappa(star->temperature.get(), star->density.get())));
-	 //v_t.push_back(log10(star->temperature.get()));
-}
-
 double Opal::get_kappa(double temperature, double density) {
 	//return star->kappa.get();
 	double T = log10(temperature);
@@ -46,4 +41,9 @@ double Opal::get_kappa(double temperature, double density) {
 	r2 = table[x + 1][y] + fR*(table[x + 1][y + 1] - table[x + 1][y]);
 
 	return pow(10.0, (r1 + fT*(r2 - r1)))/10.0; //divide by 10 to convert from cm²/g to m²/kg
+}
+
+void Opal::pushValues() {
+	arr[0].push_back(log10(star->temperature.get()));
+	arr[1].push_back(get_kappa(star->temperature.get(),star->density.get()));
 }

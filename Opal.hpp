@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Star_Constants.hpp"
-#include <IFileHandle.hpp>
+#include "IFileHandle.hpp"
 #include <vector>
 #include <string>
 #include "Graphable.hpp"
@@ -25,7 +25,7 @@ public:
 	vector<vector<double>> table;
 	Star* star;
 
-	Opal(Star* star, string filename) : star(star) {
+	Opal(Star* star, string filename) : star(star), Graphable(2) {
 		IFileHandle file(filename);
 
 		table.resize(71);
@@ -42,5 +42,10 @@ public:
 
 	double get_kappa(double temperature, double density);
 
-	void iterate();
+	void pushValues();
+
+	inline virtual void popValues() {
+		arr[0].pop_back();
+		arr[1].pop_back();
+	}
 };

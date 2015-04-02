@@ -63,7 +63,7 @@ public:
 	long double err_sensitivity;
 
 	Star(long double T_c, long double rho_c, long double x, long double y, long double z, long double step_min, long double step_max, long double int_R_stop,
-		 bool ePP, bool eCNO, bool e3a, long double err_sensitivity, long double He_cutoff = 0.0L) :
+		 bool ePP, bool eCNO, bool e3a, long double err_sensitivity,/* string opal_table,*/ long double He_cutoff = 0.0L) :
 		/*opal(this, opal_table),*/ density(this, rho_c), energy(this), kappa(this), luminosity(this), mu(this, x, y, z, He_cutoff), mass(this), tau(this), pressure(this), temperature(this, T_c),
 		R_star(0), T_star(0), T_c(T_c), rho_c(rho_c), step_min(step_min), step_max(step_max), int_R_stop(int_R_stop), ePP(ePP), eCNO(eCNO), e3a(e3a), err_sensitivity(err_sensitivity)
 	{
@@ -104,6 +104,7 @@ public:
 		tau.pushValues();
 		pressure.pushValues();
 		kappa.pushValues();
+		//opal.pushValues();
 	}
 
 	inline void popValues() {
@@ -114,6 +115,7 @@ public:
 		tau.popValues();
 		pressure.popValues();
 		kappa.popValues();
+		//opal.popValues();
 	}
 
 	inline long double frac_diff() {
