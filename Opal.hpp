@@ -25,20 +25,7 @@ public:
 	vector<vector<double>> table;
 	Star* star;
 
-	Opal(Star* star, string filename) : star(star), Graphable(2) {
-		IFileHandle file(filename);
-
-		table.resize(71);
-
-		double temp;
-		int row = 0;
-		while (!file.eof()) {
-			file >> temp;
-			table[row].push_back(temp);
-			if (file.peek() == '\n')
-				row++;
-		}
-	}
+	Opal(Star* star, string filename, bool use_opal);
 
 	double get_kappa(double temperature, double density);
 

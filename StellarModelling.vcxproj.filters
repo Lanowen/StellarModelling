@@ -51,6 +51,9 @@
     <ClCompile Include="Mu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Opal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RK4.hpp">
@@ -90,6 +93,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Star_Constants.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Opal.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -82,6 +82,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mass.cpp" />
     <ClCompile Include="Mu.cpp" />
+    <ClCompile Include="Opal.cpp" />
     <ClCompile Include="Pressure.cpp" />
     <ClCompile Include="RK4.cpp" />
     <ClCompile Include="Star.cpp" />
@@ -89,6 +90,7 @@
     <ClCompile Include="Temperature.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Opal.hpp" />
     <ClInclude Include="Star_Constants.hpp" />
     <ClInclude Include="Density.hpp" />
     <ClInclude Include="Energy.hpp" />

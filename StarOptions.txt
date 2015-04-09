@@ -18,7 +18,10 @@ PP 1
 CNO 1
 3a 1
 R_lim_default 3.0
-sensitivity 1E-7
+sensitivity 1E-6
+opal 0
+#star 99 57569.282779693691 8.23E6
+#star 99 58560 8.23E6
 #star 1 39150 5000000
 #star 2 43500 6000000
 #star 3 50300 7000000

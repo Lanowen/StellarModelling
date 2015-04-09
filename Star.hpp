@@ -9,13 +9,12 @@
 #include "Tau.hpp"
 #include "Pressure.hpp"
 #include "Temperature.hpp"
-//#include "Opal.hpp"
+#include "Opal.hpp"
 
 #include <discpp.h>
 #include <sstream>
 
 using namespace std;
-
 
 static Dislin dlin;
 
@@ -50,7 +49,7 @@ public:
 	Tau tau;
 	Pressure pressure;
 	Temperature temperature;
-	//Opal opal;
+	Opal opal;
 
 	long double step_min;
 	long double step_max;
@@ -60,11 +59,12 @@ public:
 	long double T_c, rho_c;
 	long double T_max, L_max, M_max, Rho_max,P_max;
 	bool ePP, eCNO, e3a;
+	bool use_opal;
 	long double err_sensitivity;
 
 	Star(long double T_c, long double rho_c, long double x, long double y, long double z, long double step_min, long double step_max, long double int_R_stop,
-		 bool ePP, bool eCNO, bool e3a, long double err_sensitivity,/* string opal_table,*/ long double He_cutoff = 0.0L) :
-		/*opal(this, opal_table),*/ density(this, rho_c), energy(this), kappa(this), luminosity(this), mu(this, x, y, z, He_cutoff), mass(this), tau(this), pressure(this), temperature(this, T_c),
+		 bool ePP, bool eCNO, bool e3a, bool use_opal, long double err_sensitivity, string opal_table, long double He_cutoff = 0.0L) :
+		 use_opal(use_opal), opal(this, opal_table, use_opal), density(this, rho_c), energy(this), kappa(this), luminosity(this), mu(this, x, y, z, He_cutoff), mass(this), tau(this), pressure(this), temperature(this, T_c),
 		R_star(0), T_star(0), T_c(T_c), rho_c(rho_c), step_min(step_min), step_max(step_max), int_R_stop(int_R_stop), ePP(ePP), eCNO(eCNO), e3a(e3a), err_sensitivity(err_sensitivity)
 	{
 		//add plot points for values
@@ -104,7 +104,7 @@ public:
 		tau.pushValues();
 		pressure.pushValues();
 		kappa.pushValues();
-		//opal.pushValues();
+		opal.pushValues();
 	}
 
 	inline void popValues() {
@@ -115,7 +115,7 @@ public:
 		tau.popValues();
 		pressure.popValues();
 		kappa.popValues();
-		//opal.popValues();
+		opal.popValues();
 	}
 
 	inline long double frac_diff() {

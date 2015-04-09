@@ -6,6 +6,8 @@
 
 using namespace std;
 
+
+
 int main() {
 	//233840764
 	//long double rho_c = 58560;
@@ -32,6 +34,7 @@ int main() {
 	string tag;
 	bool graph_iteration = false;
 	bool makepdf = true;
+	bool use_opal = false;
 	long double R_lim_default = 10.0L;
 
 	while (!opt.eof()) {
@@ -106,6 +109,15 @@ int main() {
 			opt.ignore(numeric_limits<streamsize>::max(), '\n');
 			continue;
 		}
+		else if (tag == "opal") {
+			int temp;
+			opt >> temp;
+
+			use_opal = temp;
+
+			opt.ignore(numeric_limits<streamsize>::max(), '\n');
+			continue;
+		}
 		else if (tag == "sensitivity") {
 			opt >> err_sensitivity;
 
@@ -146,7 +158,7 @@ int main() {
 			std::cout.precision(19);
 			cout << endl << endl << i << " /10000" << "=== Testing density: " << rho_c << " kg/m^3 , T = " << t_c << " K ===" << endl << endl;
 			std::cout.precision(ss);
-			star = new Star(t_c, rho_c, X, Y, Z, 1.0L, LDBL_MAX, 1.2L*R_lim + 1.0L, ePP, eCNO, e3a, err_sensitivity,/* "opal_.7_.28_.02.txt",*/ He_cutoff);
+			star = new Star(t_c, rho_c, X, Y, Z, 1.0L, LDBL_MAX, 1.2L*R_lim + 1.0L, ePP, eCNO, e3a, use_opal, err_sensitivity, "opal_.7_.28_.02.txt", He_cutoff);
 			RK4::step = 5000;
 			star->solve();
 
@@ -195,12 +207,12 @@ int main() {
 			rho_c_2 = rho_c;
 			int lastDir = 0;
 			int count = 0;
-			int count_min = 65;
+			int count_min = 50;
 			while (true){
 				rho_c = (rho_c_1 + rho_c_2) / 2.0;
 				if (star != 0)
 					delete star;
-				star = new Star(t_c, rho_c, X, Y, Z, 1.0L, LDBL_MAX, 1.2L*R_lim + 1.0L, ePP, eCNO, e3a, err_sensitivity,/* "opal_.7_.28_.02.txt",*/ He_cutoff);
+				star = new Star(t_c, rho_c, X, Y, Z, 1.0L, LDBL_MAX, 1.2L*R_lim + 1.0L, ePP, eCNO, e3a, use_opal, err_sensitivity, "opal_.7_.28_.02.txt", He_cutoff);
 
 				std::cout.precision(19);
 				cout << count << " /" << count_min << (count > count_min ? " (trying to end on positive fractional) " : "")  << "=== Testing density: " << rho_c << " kg/m^3 , T = " << t_c << " K ===" << endl << endl;
@@ -223,13 +235,22 @@ int main() {
 					}
 				}
 
-				if (star->frac_diff() > 0) {
-					if (last_pos_frac == 0 || last_pos_frac->frac_diff() > star->frac_diff()) {
+				long double frac = star->frac_diff();
+
+				if (last_pos_frac == 0 || abs(last_pos_frac->frac_diff()) > abs(frac)) {
+					if (last_pos_frac != 0)
+						delete last_pos_frac;
+					last_pos_frac = star;
+					star = 0;
+				}
+
+				if (frac > 0) {
+					/*if (last_pos_frac == 0 || last_pos_frac->frac_diff() > star->frac_diff()) {
 						if (last_pos_frac != 0)
 							delete last_pos_frac;
 						last_pos_frac = star;
 						star = 0;
-					}					
+					}	*/				
 				down:
 					lastDir = 2;
 					R_lim = R_lim;

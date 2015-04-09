@@ -8,6 +8,8 @@ void Star::iterate() {
 	vector<double long> errors, relErrors;
 
 	while (true) {
+		errors.clear();
+		relErrors.clear();
 		push();
 		step();
 		errors.push_back(temperature.solver.getError());
@@ -19,6 +21,7 @@ void Star::iterate() {
 		relErrors.push_back(density.solver.getRelError());
 		relErrors.push_back(luminosity.solver.getRelError());
 		relErrors.push_back(mass.solver.getRelError());
+		//relErrors.push_back(tau.solver.getRelError());
 		//pop();
 
 		long double err_bound = err_sensitivity;
@@ -26,10 +29,10 @@ void Star::iterate() {
 		long double relerr = LDBL_EPSILON;
 
 		for (int i = 0; i < errors.size(); i++) {
-			if (errors[i] > err) {
+			if (!isnan(errors[i]) && errors[i] > err) {
 				err = errors[i];
 			}
-			if (relErrors[i] > relerr) {
+			if (!isnan(relErrors[i]) && relErrors[i] > relerr) {
 				relerr = relErrors[i];
 
 			}
@@ -233,10 +236,7 @@ void Star::graph(int starnum, bool makepdf) {
 	dlin.nochek();
 	dlin.title();
 	dlin.linwid(lineWidth);
-
-	dlin.legini(legendText, 4, 50);
-
-	
+	dlin.legini(legendText, use_opal ? 5 : 4, 50);	
 
 	plotconv();
 
@@ -259,14 +259,19 @@ void Star::graph(int starnum, bool makepdf) {
 	dlin.leglin(legendText, "$\\kappa_{H^{-}}$", legendIndex++);
 	dlin.curve(this->kappa.logT->data(), this->kappa.kh->data(), this->kappa.kh->size());
 
+	if (use_opal) {
+		dlin.lintyp(LINE_SOLID);
+		dlin.color("ORANGE");
+		dlin.leglin(legendText, "$\\kappa_{Opal}$", legendIndex++);
+		dlin.curve(this->kappa.logT->data(), this->opal.arr[1].data(), this->opal.arr[0].size());
+	}
+
 	dlin.color("FORE");
 	dlin.legtit("Legend");
 	dlin.legpos(1835, 420);
 	dlin.legend(legendText, legendIndex - 1);
 
-	//dlin.lintyp(LINE_SOLID);
-	//dlin.color("ORANGE");
-	//dlin.curve(this->opal.v_t.data(), this->opal.v_y.data(), this->opal.v_t.size());
+	
 
 	dlin.disfin();
 
