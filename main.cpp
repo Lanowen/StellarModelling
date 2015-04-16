@@ -9,10 +9,7 @@ using namespace std;
 
 
 int main() {
-	//233840764
-	//long double rho_c = 58560;
 	long double rho_c = 62900;
-	//long double rho_c = 83480;
 	Star* star = 0;
 	double X = 0.7, Y = 0.28, Z = 0.02;
 	long double t_c = 8.23E6L, rho_c_1 = rho_c, rho_c_2 = 0;
@@ -22,7 +19,22 @@ int main() {
 	long double shoot_delta_density = 200.0L;
 	
 	
-	IFileHandle opt("StarOptions.txt");
+	IFileHandle options_file("StarOptions.txt");
+	ofstream stars_output("stars_tab_delimited.txt", ofstream::trunc);
+	stars_output.precision(19);
+
+	stars_output << "Star id" << "\t"
+		<< "T_tau" << "\t"
+		<< "L/Lsun" << "\t"
+		<< "log10(T_tau)" << "\t"
+		<< "M/Msun" << "\t"
+		<< "R/Rsun" << "\t"
+		<< "\t"
+		<< "R/Rsun text" << "\t"
+		<< "L/Lsun text" << "\t"
+		<< "\t"
+		<< "T_SB" << "\t"
+		<< "log10(T_SB)" << endl;
 	
 	//for (int t = 16; t < 17; t++) {
 		//long double t_c = 2.0E8, rho_c = 238407, rho_c_1 = rho_c, rho_c_2 = 0;
@@ -37,7 +49,7 @@ int main() {
 	bool use_opal = false;
 	long double R_lim_default = 10.0L;
 
-	while (!opt.eof()) {
+	while (!options_file.eof()) {
 		
 		int frac_test = 0;
 		bool bisect = false;
@@ -46,103 +58,103 @@ int main() {
 		bool red_giant = false;
 		long double He_cutoff = 0.0L;
 
-		opt >> tag;
+		options_file >> tag;
 		if (tag == "#" || tag.find("#") != tag.npos) {
 			//do nothing
-			opt.ignore(numeric_limits<streamsize>::max(), '\n');
+			options_file.ignore(numeric_limits<streamsize>::max(), '\n');
 			continue;
 		}
 		else if (tag == "shoot_density_change") {
-			opt >> shoot_delta_density;
+			options_file >> shoot_delta_density;
 
-			opt.ignore(numeric_limits<streamsize>::max(), '\n');
+			options_file.ignore(numeric_limits<streamsize>::max(), '\n');
 			continue;
 		}
 		else if (tag == "graph_every_iteration") {
 			int temp;
-			opt >> temp;
+			options_file >> temp;
 
 			graph_iteration = temp;
 
-			opt.ignore(numeric_limits<streamsize>::max(), '\n');
+			options_file.ignore(numeric_limits<streamsize>::max(), '\n');
 			continue;
 		}
 		else if (tag == "make_pdf") {
 			int temp;
-			opt >> temp;
+			options_file >> temp;
 
 			makepdf = temp;
 
-			opt.ignore(numeric_limits<streamsize>::max(), '\n');
+			options_file.ignore(numeric_limits<streamsize>::max(), '\n');
 			continue;
 		}
 		else if (tag == "XYZ") {
-			opt >> X >> Y >> Z;
+			options_file >> X >> Y >> Z;
 
-			opt.ignore(numeric_limits<streamsize>::max(), '\n');
+			options_file.ignore(numeric_limits<streamsize>::max(), '\n');
 			continue;
 		}
 		else if (tag == "PP") {
 			int temp;
-			opt >> temp;
+			options_file >> temp;
 
 			ePP = temp;
 
-			opt.ignore(numeric_limits<streamsize>::max(), '\n');
+			options_file.ignore(numeric_limits<streamsize>::max(), '\n');
 			continue;
 		}
 		else if (tag == "CNO") {
 			int temp;
-			opt >> temp;
+			options_file >> temp;
 
 			eCNO = temp;
 
-			opt.ignore(numeric_limits<streamsize>::max(), '\n');
+			options_file.ignore(numeric_limits<streamsize>::max(), '\n');
 			continue;
 		}
 		else if (tag == "3a") {
 			int temp;
-			opt >> temp;
+			options_file >> temp;
 
 			e3a = temp;
 
-			opt.ignore(numeric_limits<streamsize>::max(), '\n');
+			options_file.ignore(numeric_limits<streamsize>::max(), '\n');
 			continue;
 		}
 		else if (tag == "opal") {
 			int temp;
-			opt >> temp;
+			options_file >> temp;
 
 			use_opal = temp;
 
-			opt.ignore(numeric_limits<streamsize>::max(), '\n');
+			options_file.ignore(numeric_limits<streamsize>::max(), '\n');
 			continue;
 		}
 		else if (tag == "sensitivity") {
-			opt >> err_sensitivity;
+			options_file >> err_sensitivity;
 
-			opt.ignore(numeric_limits<streamsize>::max(), '\n');
+			options_file.ignore(numeric_limits<streamsize>::max(), '\n');
 			continue;
 		}
 		else if (tag == "R_lim_default") {
-			opt >> R_lim_default;
+			options_file >> R_lim_default;
 
 			R_lim = R_lim_default;
 
-			opt.ignore(numeric_limits<streamsize>::max(), '\n');
+			options_file.ignore(numeric_limits<streamsize>::max(), '\n');
 			continue;
 		}
 		else if (tag == "star") {
-			opt >> t >> rho_c >> t_c;
+			options_file >> t >> rho_c >> t_c;
 			red_giant = false;
 		}
 		else if (tag == "redgiant") {
-			opt >> t >> rho_c >> t_c >> He_cutoff;
+			options_file >> t >> rho_c >> t_c >> He_cutoff;
 			red_giant = true;
 		}
 		else {
 			//do nothing
-			opt.ignore(numeric_limits<streamsize>::max(), '\n');
+			options_file.ignore(numeric_limits<streamsize>::max(), '\n');
 			continue;
 		}
 
@@ -207,7 +219,7 @@ int main() {
 			rho_c_2 = rho_c;
 			int lastDir = 0;
 			int count = 0;
-			int count_min = 50;
+			int count_min = 60;
 			while (true){
 				rho_c = (rho_c_1 + rho_c_2) / 2.0;
 				if (star != 0)
@@ -275,19 +287,25 @@ int main() {
 		}
 
 		last_pos_frac->graph(t, makepdf);
+		stars_output << t << "\t"
+			<< last_pos_frac->T_star << "\t"
+			<< last_pos_frac->L_max / Lsun << "\t"
+			<< log10(last_pos_frac->T_star) << "\t"
+			<< last_pos_frac->M_max / Msun << "\t"
+			<< last_pos_frac->R_star / Rsun << "\t"
+			<< "\t"
+			<< ((last_pos_frac->M_max / Msun < 1.66) ? (1.06*pow(last_pos_frac->M_max / Msun, 0.945)) : (1.33*pow(last_pos_frac->M_max / Msun, 0.555))) << "\t"
+			<< ((last_pos_frac->M_max / Msun < 0.7) ? (0.35*pow(last_pos_frac->M_max / Msun, 2.62)) : (1.02*pow(last_pos_frac->M_max / Msun, 3.92))) << "\t"
+			<< "\t"
+			<< pow(last_pos_frac->L_max / 4.0 / pi / pow(last_pos_frac->R_star, 2) / sigma_B, 1.0 / 4.0) << "\t"
+			<< log10(pow(last_pos_frac->L_max / 4.0 / pi / pow(last_pos_frac->R_star, 2) / sigma_B, 1.0 / 4.0)) << endl;
+
 		delete last_pos_frac;
 
-		opt.ignore(numeric_limits<streamsize>::max(), '\n');
+		options_file.ignore(numeric_limits<streamsize>::max(), '\n');
 	}
 
-	//Star* star;
-	//star = new Star(8.23E6, 58560, 0.70, 0.28, 0.02, 5000.0L, 10000.0L, 1.2L);
-	//star = new Star(8.23E6, 58546.296424781904, 0.70, 0.28, 0.02);
-	//star = new Star(8.23E6, 57001.40863806593, 0.70, 0.28, 0.02);
-	//star = new Star(1.571E7, 1.622E5, 0.70, 0.28, 0.02);
-
-	//star->solve();
-	//star->graph(1);
+	stars_output.close();
 
 	system("PAUSE");
 

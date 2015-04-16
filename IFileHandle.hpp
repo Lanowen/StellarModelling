@@ -9,7 +9,7 @@ class IFileHandle : public ifstream {
 public:
 	IFileHandle(string filename) : ifstream() {
 		exceptions ( ifstream::failbit);
-		open(filename);	
+		open(filename);
 		exceptions ( NULL );
 	}
 

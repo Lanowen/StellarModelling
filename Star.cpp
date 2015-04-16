@@ -5,40 +5,28 @@
 #define lineWidth 4
 
 void Star::iterate() {
-	vector<double long> errors, relErrors;
+	vector<double long> relErrors;
 
 	while (true) {
-		errors.clear();
 		relErrors.clear();
 		push();
 		step();
-		errors.push_back(temperature.solver.getError());
-		//errors.push_back(density.solver.getError());
-		//errors.push_back(luminosity.solver.getError());
-		//errors.push_back(mass.solver.getError());
 
 		relErrors.push_back(temperature.solver.getRelError());
 		relErrors.push_back(density.solver.getRelError());
 		relErrors.push_back(luminosity.solver.getRelError());
 		relErrors.push_back(mass.solver.getRelError());
 		//relErrors.push_back(tau.solver.getRelError());
-		//pop();
 
 		long double err_bound = err_sensitivity;
-		long double err = LDBL_EPSILON;
 		long double relerr = LDBL_EPSILON;
 
-		for (int i = 0; i < errors.size(); i++) {
-			if (!isnan(errors[i]) && errors[i] > err) {
-				err = errors[i];
-			}
+		for (int i = 0; i < relErrors.size(); i++) {
 			if (!isnan(relErrors[i]) && relErrors[i] > relerr) {
 				relerr = relErrors[i];
 
 			}
 		}
-
-		//cout << RK4::step << " " << relerr << endl;
 
 		long double lastStep = RK4::step;
 		RK4::step = max(step_min, min(RK4::step*pow(err_bound / 2.0 / relerr, 0.25), step_max));
@@ -51,10 +39,6 @@ void Star::iterate() {
 		clear();
 		break;
 	};
-
-	//cout << RK4::step << " " << abs((T2[0] - T1[0]) / T2[0]) << " " << terr << endl;
-
-	//cout << this->temperature.arr[1].back() << endl;
 	
 	pushValues();
 	
@@ -68,11 +52,8 @@ void Star::solve() {
 #ifdef _DEBUG
 	dlin.metafl("XWIN");
 #endif
-	//cout << kappa.get() << " " << kappa.get()*pow(density.get(), 2) / abs(density.dRho_dr(density.arr[0].back(), density.get())) << endl;
-	//while (kappa.get()*pow(density.get(), 2) / abs(density.dRho_dr(density.arr[0].back(), density.get())) > 1E-30 && temperature.arr[0].back() < int_R_stop*Rsun && mass.get() < 1E3*Msun) {
-	while (temperature.arr[0].back() < int_R_stop*Rsun && mass.get() < 1E3*Msun) {
+	while (kappa.get()*pow(density.get(), 2) / abs(density.dRho_dr(density.arr[0].back(), density.get())) > LDBL_EPSILON && temperature.arr[0].back() < int_R_stop*Rsun && mass.get() < 1E3*Msun) {
 		this->iterate();
-		//cout << this->temperature.arr[1].back() << endl;
 	}
 
 	for (int i = 0; i < 20000*int_R_stop; i++) {
@@ -85,7 +66,6 @@ void Star::solve() {
 	
 	long double Tau_inf = this->tau.arr[1].back();
 	for (int i = this->tau.arr[1].size() - 1; i >= 0; i--) {
-		//cout << Tau_inf - this->tau.arr[1][i] << endl;
 		if (Tau_inf - this->tau.arr[1][i] > 2.0 / 3.0) {
 			T_star = this->temperature.arr[1][i + 1];
 			R_star = this->temperature.arr[0][i + 1];
@@ -199,32 +179,32 @@ void Star::graph(int starnum, bool makepdf) {
 		this->kappa.kh->at(i) = log10(this->kappa.kh->at(i));
 	}
 
-	//dislinInit("$\\log(T)$$ (K)", "$\\log(\\kappa)$ ($\\frac{m^2}{kg}$) ", "Kappa");
-	//dlin.graf(3, 8, 3, 1, -2, 10, -2, 1);
-	//dlin.nochek();
-	//dlin.title();
-	//dlin.linwid(lineWidth);
+	/*dislinInit("$\\log(T)$$ (K)", "$\\log(\\kappa)$ ($\\frac{m^2}{kg}$) ", "Kappa", starnum);
+	dlin.graf(3, 8, 3, 1, -6, 8, -6, 1);
+	dlin.nochek();
+	dlin.title();
+	dlin.linwid(lineWidth);
 
-	//dlin.color("FORE");
-	//dlin.curve(this->kappa.logT->data(), this->kappa.k->data(), this->kappa.k->size());
+	dlin.color("FORE");
+	dlin.curve(this->kappa.logT->data(), this->kappa.k->data(), this->kappa.k->size());
 
-	//dlin.lintyp(LINE_DOT);
-	//dlin.color("BLUE");
-	//dlin.curve(this->kappa.logT->data(), this->kappa.kes->data(), this->kappa.kes->size());
+	dlin.lintyp(LINE_DOT);
+	dlin.color("BLUE");
+	dlin.curve(this->kappa.logT->data(), this->kappa.kes->data(), this->kappa.kes->size());
 
-	//dlin.lintyp(LINE_DASHL);
-	//dlin.color("GREEN");
-	//dlin.curve(this->kappa.logT->data(), this->kappa.kff->data(), this->kappa.kff->size());
+	dlin.lintyp(LINE_DASHL);
+	dlin.color("GREEN");
+	dlin.curve(this->kappa.logT->data(), this->kappa.kff->data(), this->kappa.kff->size());
 
-	//dlin.lintyp(LINE_DASH);
-	//dlin.color("RED");
-	//dlin.curve(this->kappa.logT->data(), this->kappa.kh->data(), this->kappa.kh->size());
+	dlin.lintyp(LINE_DASH);
+	dlin.color("RED");
+	dlin.curve(this->kappa.logT->data(), this->kappa.kh->data(), this->kappa.kh->size());
 
-	////dlin.lintyp(LINE_SOLID);
-	////dlin.color("ORANGE");
-	////dlin.curve(this->opal.v_t.data(), this->opal.v_y.data(), this->opal.v_t.size());
+	dlin.lintyp(LINE_SOLID);
+	dlin.color("ORANGE");
+	dlin.curve(this->kappa.logT->data(), this->opal.arr[1].data(), this->opal.arr[0].size());
 
-	//dlin.disfin();
+	dlin.disfin();*/
 
 	for (int i = 0; i < this->kappa.logT->size(); i++) {
 		this->kappa.logT->at(i) = this->temperature.arr[0][i];
@@ -317,37 +297,36 @@ void Star::graph(int starnum, bool makepdf) {
 	dlin.legend(legendText, legendIndex - 1);
 
 	stringstream ss;
-	ss << "$T_{*}$ = " << T_star << " K";
+	ss << "$T_{*,\\tau}$ = " << T_star << " K";
 	dlin.messag(ss.str().c_str(), 1500, 800);
+	ss.str("");
+	ss << "$T_{*,SB}$ = " << pow(L_max/4.0/pi/pow(R_star,2)/sigma_B, 1.0/4.0) << " K";
+	dlin.messag(ss.str().c_str(), 1500, 860);
 	ss.str("");
 	streamsize ssize = ss.precision();
 	ss.precision(19);
 	ss << "$\\rho_c$ = " << rho_c << " $kg/m^3$";
-	dlin.messag(ss.str().c_str(), 1500, 860);
+	dlin.messag(ss.str().c_str(), 1500, 920);
 	ss.precision(ssize);
 	ss.str("");
 	ss << "$R_{*}$ = " << R_star / Rsun << " $R_\\odot$";
-	dlin.messag(ss.str().c_str(), 1500, 920);
-	ss.str("");
-	ss << "$M_{*}$ = " << M_max / Msun << " $M_\\odot$";
 	dlin.messag(ss.str().c_str(), 1500, 980);
 	ss.str("");
-	ss << "$L_{*}$ = " << L_max / Lsun << " $L_\\odot$";
+	ss << "$M_{*}$ = " << M_max / Msun << " $M_\\odot$";
 	dlin.messag(ss.str().c_str(), 1500, 1040);
+	ss.str("");
+	ss << "$L_{*}$ = " << L_max / Lsun << " $L_\\odot$";
+	dlin.messag(ss.str().c_str(), 1500, 1100);
 	ss.str("");
 	ss.precision(19);
 	ss << "$T_{c}$ = " << T_c << " K";
-	dlin.messag(ss.str().c_str(), 1500, 1100);
+	dlin.messag(ss.str().c_str(), 1500, 1160);
 	ss.str("");
 	ss.precision(ssize);
 	ss << "$P_{c}$ = " << P_max << " Pa";
-	dlin.messag(ss.str().c_str(), 1500, 1160);
+	dlin.messag(ss.str().c_str(), 1500, 1220);
 
 	dlin.disfin();
-
-
-
-
 
 	dislinInit("$\\frac{ R }{R_*}$", "$P/P_{c}$", "Pressure", starnum);
 

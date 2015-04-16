@@ -1,6 +1,5 @@
 #pragma once
 
-
 #define Msun 1.989E30L  //Mass of Sun
 #define Rsun  6.958E8L     //Radius of sun
 #define Lsun  3.846E26L  //Luminostity of the sun

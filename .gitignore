@@ -25,6 +25,11 @@ obj/
 Debug/
 Release/
 MS/
+MS_new/
+MS_new_new/
+stars_tab_delimited.txt
+*.bib
+StellarModelling_report_*
 *.xlsx
 *.pdf
 *.zip
