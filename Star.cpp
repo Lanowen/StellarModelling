@@ -24,7 +24,6 @@ void Star::iterate() {
 		for (int i = 0; i < relErrors.size(); i++) {
 			if (!isnan(relErrors[i]) && relErrors[i] > relerr) {
 				relerr = relErrors[i];
-
 			}
 		}
 
@@ -89,7 +88,7 @@ void Star::solve() {
 	cout << "Mass: " << M_max / Msun << " Msun" << endl;
 	cout << "Luminosity: " << L_max / Lsun << " Lsun" << endl;
 
-	cout << L_max << " - " << 4.0*pi*sigma_B*R_star*R_star*pow(T_star, 4) << " : " << L_max - 4.0*pi*sigma_B*R_star*R_star*pow(T_star, 4) << ". fractional: " << (L_max - 4.0*pi*sigma_B*R_star*R_star*pow(T_star, 4)) / sqrt(4.0*pi*sigma_B*R_star*R_star*pow(T_star, 4)) << endl;
+	cout << L_max << " - " << 4.0*pi*sigma_B*R_star*R_star*pow(T_star, 4) << " : " << L_max - 4.0*pi*sigma_B*R_star*R_star*pow(T_star, 4) << ". fractional: " << (L_max - 4.0*pi*sigma_B*R_star*R_star*pow(T_star, 4)) / sqrt(4.0*pi*sigma_B*R_star*R_star*pow(T_star, 4)*L_max) << endl;
 
 }
 
@@ -264,9 +263,6 @@ void Star::graph(int starnum, bool makepdf) {
 	dlin.legini(legendText, 4, 50);
 
 	plotconv();
-
-
-
 
 	dlin.lintyp(LINE_DASH);
 	dlin.color("RED");

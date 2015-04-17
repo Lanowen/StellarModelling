@@ -28,7 +28,6 @@ double Opal::get_kappa(double temperature, double density) {
 	for (int i = 1; i < table.size(); i++) {
 		if (table[i][0] <= T) {
 			x = i;
-
 		}
 	}
 
@@ -38,33 +37,36 @@ double Opal::get_kappa(double temperature, double density) {
 		}
 	}
 
-	if (y == table[x].size() - 1 && (x == table.size() - 1 || y > table[x+1].size() - 1)) {
-		return pow(10.0, table[x][y]) / 10.0; //divide by 10 to convert from cm²/g to m²/kg
-	}
-	if (x == table.size() - 1) {
-		double fR = (R - table[0][y]) / (table[0][y + 1] - table[0][y]);
-		double r1;
-
-		r1 = table[x][y] + fR*(table[x][y + 1] - table[x][y]);
-
-		return pow(10.0, r1) / 10.0; //divide by 10 to convert from cm²/g to m²/kg
-	}
-	if (y == table[x].size() - 1) {
-		double fT = (T - table[x][0]) / (table[x + 1][0] - table[x][0]);
-		double r1, r2;
-
-		r1 = table[x][y];
-		r2 = table[x + 1][y];
-
-		return pow(10.0, (r1 + fT*(r2 - r1))) / 10.0; //divide by 10 to convert from cm²/g to m²/kg
+	//check to see if we are on the table, and if not, push it back
+	while (y >= table[x].size()) {
+		x--; y--;
 	}
 
-
-	double fT = (T - table[x][0]) / (table[x + 1][0] - table[x][0]), fR = (R - table[0][y]) / (table[0][y + 1] - table[0][y]);
+	double fT, fR;
 	double r1, r2;
 	
-	r1 = table[x][y] + fR*(table[x][y + 1] - table[x][y]);
-	r2 = table[x + 1][y] + fR*(table[x + 1][y + 1] - table[x + 1][y]);
+	if ((x < table.size() - 1 && y > table[x + 1].size() - 1) || x == table.size() - 1) {
+		fR = (R - table[0][y]) / (table[0][y + 1] - table[0][y]);
+		fT = (T - table[x][0]) / (table[x - 1][0] - table[x][0]);
+	}
+	else if (y == table[x].size() - 1) {
+		fR = (R - table[0][y]) / (table[0][y - 1] - table[0][y]);
+		fT = (T - table[x][0]) / (table[x + 1][0] - table[x][0]);
+	}
+	else {
+		fT = (T - table[x][0]) / (table[x + 1][0] - table[x][0]);
+		fR = (R - table[0][y]) / (table[0][y + 1] - table[0][y]);
+	}	
+	
+	if (y == table[x].size() - 2 && y == table[x + 1].size() - 1) {
+		r1 = table[x][y] + fR*(table[x][y + 1] - table[x][y]);
+		r2 = table[x + 1][y] + fR*(table[x + 1][y] - table[x + 1][y-1]);
+
+	}
+	else {
+		r1 = table[x][y] + fR*(table[x][y + 1] - table[x][y]);
+		r2 = table[x + 1][y] + fR*(table[x + 1][y + 1] - table[x + 1][y]);
+	}
 
 	return pow(10.0, (r1 + fT*(r2 - r1)))/10.0; //divide by 10 to convert from cm²/g to m²/kg
 }

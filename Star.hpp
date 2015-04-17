@@ -119,7 +119,7 @@ public:
 	}
 
 	inline long double frac_diff() {
-		return (L_max - 4.0*pi*sigma_B*R_star*R_star*pow(T_star, 4)) / sqrt(4.0*pi*sigma_B*R_star*R_star*pow(T_star, 4));
+		return (L_max - 4.0*pi*sigma_B*R_star*R_star*pow(T_star, 4)) / sqrt(4.0*pi*sigma_B*R_star*R_star*pow(T_star, 4)*L_max);
 	}
 
 	inline void step() {

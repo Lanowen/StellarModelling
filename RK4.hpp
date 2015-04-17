@@ -58,9 +58,7 @@ public:
 			currK = 1;
 			return false;
 		}
-
 		currK++;
-
 		return true;
 	}
 
@@ -87,8 +85,6 @@ public:
 	inline void iterate() {
 		y += k1*25.0 / 216.0 + k3*1408.0 / 2565.0 + k4*2197.0 / 4104.0 - k5 / 5.0;
 		t += step;
-		//v_t.push_back(t);
-		//v_y.push_back(y);
 	}
 
 	inline long double getError() {

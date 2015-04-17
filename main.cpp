@@ -18,7 +18,6 @@ int main() {
 
 	long double shoot_delta_density = 200.0L;
 	
-	
 	IFileHandle options_file("StarOptions.txt");
 	ofstream stars_output("stars_tab_delimited.txt", ofstream::trunc);
 	stars_output.precision(19);
@@ -256,13 +255,7 @@ int main() {
 					star = 0;
 				}
 
-				if (frac > 0) {
-					/*if (last_pos_frac == 0 || last_pos_frac->frac_diff() > star->frac_diff()) {
-						if (last_pos_frac != 0)
-							delete last_pos_frac;
-						last_pos_frac = star;
-						star = 0;
-					}	*/				
+				if (frac > 0) { //positive, go lower			 
 				down:
 					lastDir = 2;
 					R_lim = R_lim;
@@ -270,9 +263,8 @@ int main() {
 					rho_c_1 = min(rho_c_1, rho_c_2);
 					rho_c_2 = rho_c;
 				}
-				else{
+				else{ //negative, go higher
 				up:
-
 					lastDir = 1;
 					cout << endl << endl << "Bisecting up." << endl;
 					rho_c_1 = max(rho_c_1, rho_c_2);
